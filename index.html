@@ -15,10 +15,10 @@
   }
   main { width: 100%; max-width: 380px; text-align: center; }
   .logo {
-    width: 84px; height: 84px; margin: 0 auto 18px; border-radius: 26px; display: flex; align-items: center;
-    justify-content: center; font-weight: 800; font-size: 30px; color: #14121a;
-    background: linear-gradient(135deg, #E6E9EE 0%, #AEB4BE 100%); box-shadow: 0 18px 40px -18px #AEB4BE;
+    width: 92px; height: 92px; margin: 0 auto 18px; border-radius: 24px; overflow: hidden;
+    box-shadow: 0 18px 40px -18px rgba(174, 180, 190, 0.6);
   }
+  .logo svg { display: block; width: 100%; height: 100%; }
   h1 { font-size: 24px; margin: 0 0 8px; }
   p { color: #A9AEB8; font-size: 15px; line-height: 1.45; margin: 0 0 18px; }
   .btn {
@@ -26,17 +26,47 @@
     color: #14121a; background: linear-gradient(135deg, #E6E9EE 0%, #AEB4BE 100%); cursor: pointer; text-decoration: none;
   }
   .ghost { margin-top: 10px; background: rgba(255,255,255,0.08); color: #EDEFF3; }
-  .code {
-    margin: 18px 0 6px; font: 700 22px/1.2 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: 0.12em;
-  }
+  .code { margin: 18px 0 4px; font: 700 22px/1.2 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: 0.12em; }
   .small { font-size: 13px; color: #8C919B; }
-  .steps { text-align: left; margin: 18px 0 0; padding: 14px 16px; border-radius: 18px; background: rgba(255,255,255,0.05); }
-  .steps li { color: #C9CDD4; font-size: 14px; margin: 6px 0; }
+  .card { text-align: left; margin: 18px 0 0; padding: 14px 16px; border-radius: 18px; background: rgba(255,255,255,0.05); }
+  .card ol { margin: 0; padding-left: 20px; }
+  .card li { color: #C9CDD4; font-size: 14px; line-height: 1.45; margin: 7px 0; }
+  details { margin-top: 10px; }
+  summary { cursor: pointer; font-weight: 700; font-size: 14px; color: #EDEFF3; list-style: none; }
+  summary::-webkit-details-marker { display: none; }
+  summary::after { content: " ›"; color: #8C919B; }
+  details[open] summary::after { content: " ⌄"; }
+  details ul { margin: 8px 0 0; padding-left: 18px; }
+  details li { color: #C9CDD4; font-size: 13.5px; line-height: 1.45; margin: 6px 0; }
+  .help { margin-top: 14px; font-size: 13px; color: #8C919B; }
 </style>
 </head>
 <body>
 <main>
-  <div class="logo">KX</div>
+  <!-- Ikona aplikacji KX (assets/icon/kx-icon.svg): srebrny dymek z „KX" na ciemnym tle. -->
+  <div class="logo" aria-hidden="true">
+    <svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#2a2830"/><stop offset="1" stop-color="#0f0e12"/>
+        </linearGradient>
+        <linearGradient id="bub" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stop-color="#E6E9EE"/><stop offset="1" stop-color="#AEB4BE"/>
+        </linearGradient>
+        <radialGradient id="shine" cx="0.32" cy="0.24" r="0.8">
+          <stop offset="0" stop-color="#ffffff" stop-opacity="0.42"/><stop offset="0.5" stop-color="#ffffff" stop-opacity="0"/>
+        </radialGradient>
+      </defs>
+      <rect width="512" height="512" fill="url(#bg)"/>
+      <g transform="translate(256 256) scale(0.8) translate(-256 -262)">
+        <path fill="url(#bub)" d="M256 40 C 134 40 40 132 40 248 C 40 314 71 373 120 412 L 120 468 C 120 482 135 491 147 484 L 206 450 C 222 454 239 456 256 456 C 378 456 472 364 472 248 C 472 132 378 40 256 40 Z"/>
+        <path fill="url(#shine)" d="M256 40 C 134 40 40 132 40 248 C 40 314 71 373 120 412 L 120 468 C 120 482 135 491 147 484 L 206 450 C 222 454 239 456 256 456 C 378 456 472 364 472 248 C 472 132 378 40 256 40 Z"/>
+        <text x="256" y="252" text-anchor="middle" dominant-baseline="central"
+              font-family="Arial, Helvetica, sans-serif" font-weight="800" font-size="190" fill="#15141a" letter-spacing="-6">KX</text>
+      </g>
+    </svg>
+  </div>
+
   <h1 id="title">Dołącz do KX</h1>
   <p id="lead">Pobieranie zaraz się zacznie. Po instalacji i zalogowaniu znajomy doda Ci się sam.</p>
   <button class="btn" id="go" type="button">Pobierz KX</button>
@@ -45,11 +75,26 @@
     <div class="code" id="code"></div>
     <div class="small">Kod zaproszenia</div>
   </div>
-  <ol class="steps">
-    <li>Otwórz pobrany plik <b>komunikator.apk</b> i zainstaluj (telefon może poprosić o zgodę na instalację z przeglądarki).</li>
-    <li>Uruchom KX i załóż konto albo się zaloguj.</li>
-    <li>Gotowe — znajomy będzie już na liście. Gdyby go nie było: <b>Osoby → Dodaj znajomego</b> i wpisz kod powyżej.</li>
-  </ol>
+
+  <div class="card">
+    <ol>
+      <li>Otwórz pobrany plik <b>komunikator.apk</b> (z powiadomień albo z folderu Pobrane) i stuknij <b>Zainstaluj</b>.</li>
+      <li>Uruchom KX i załóż konto albo się zaloguj.</li>
+      <li>Gotowe — osoba, która Cię zaprosiła, jest już w znajomych. Jeśli jej nie ma: <b>Osoby → Dodaj znajomego</b> i wpisz kod powyżej.</li>
+    </ol>
+
+    <details>
+      <summary>Telefon blokuje instalację?</summary>
+      <ul>
+        <li>Gdy pojawi się komunikat o blokadzie, stuknij <b>Ustawienia</b> i włącz <b>„Zezwalaj z tego źródła"</b> (dla przeglądarki, np. Chrome). Wróć i stuknij <b>Zainstaluj</b>.</li>
+        <li>Jeśli pojawi się ostrzeżenie <b>Play Protect</b>: <b>Więcej szczegółów → Zainstaluj mimo to</b>. Nie wyłączaj Play Protect.</li>
+        <li><b>Samsung</b>: jeśli nadal blokuje, sprawdź <b>Ustawienia → Bezpieczeństwo i prywatność → Automatyczna blokada</b> i wyłącz ją na czas instalacji (potem możesz włączyć z powrotem).</li>
+        <li>Po instalacji możesz wyłączyć „Zezwalaj z tego źródła" — KX będzie działać dalej.</li>
+      </ul>
+    </details>
+  </div>
+
+  <div class="help">Coś nie działa? Napisz do osoby, która Cię zaprosiła — pomoże.</div>
 </main>
 <script>
 (function () {
