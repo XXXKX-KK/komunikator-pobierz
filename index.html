@@ -8,6 +8,7 @@
 <style>
   :root { color-scheme: dark; }
   * { box-sizing: border-box; }
+  [hidden] { display: none !important; }
   body {
     margin: 0; min-height: 100dvh; display: flex; align-items: center; justify-content: center;
     background: radial-gradient(ellipse at 50% 0%, #23262e 0%, #0B0A0D 60%);
@@ -76,7 +77,7 @@
     <div class="small">Kod zaproszenia</div>
   </div>
 
-  <div class="card">
+  <div class="card" id="steps">
     <ol>
       <li>Otwórz pobrany plik <b>komunikator.apk</b> (z powiadomień albo z folderu Pobrane) i stuknij <b>Zainstaluj</b>.</li>
       <li>Uruchom KX i załóż konto albo się zaloguj.</li>
@@ -101,9 +102,29 @@
   var APK = "https://github.com/XXXKX-KK/komunikator-pobierz/releases/latest/download/komunikator.apk";
   var q = new URLSearchParams(location.search);
   var h = new URLSearchParams(location.hash.replace(/^#/, ""));
+  var android = /Android/i.test(navigator.userAgent);
+
+  // Link z e-maila potwierdzającego rejestrację (Supabase): nie pobieramy APK,
+  // tylko mówimy, że konto jest potwierdzone i trzeba wrócić do KX.
+  var confirmed = h.get("type") === "signup" || h.has("access_token") || (q.has("code") && !q.has("kx"));
+  var authError = h.get("error_description") || q.get("error_description");
+  if (confirmed || authError) {
+    // Tokeny z adresu nie są nam potrzebne — usuwamy je z paska adresu.
+    history.replaceState(null, "", location.pathname);
+    document.getElementById("title").textContent = confirmed && !authError ? "E-mail potwierdzony ✅" : "Ten link już nie działa";
+    document.getElementById("lead").textContent = confirmed && !authError
+      ? "Wróć do aplikacji KX i stuknij „Zaloguj się”. Znajomy z zaproszenia doda się sam."
+      : "Jeśli konto jest już potwierdzone — po prostu zaloguj się w KX. Jeśli nie, zarejestruj się jeszcze raz, a przyjdzie nowy link.";
+    var goBtn = document.getElementById("go");
+    goBtn.textContent = "Otwórz KX";
+    goBtn.addEventListener("click", function () {
+      location.href = android ? "intent://z/ok#Intent;scheme=kx;package=com.kx.komunikator;end" : "kx://z/ok";
+    });
+    document.getElementById("steps").hidden = true;
+    return;
+  }
   var code = (q.get("kx") || h.get("kx") || "").toUpperCase().replace(/[^A-Z0-9]/g, "").slice(0, 16);
   var name = (q.get("n") || "").slice(0, 60);
-  var android = /Android/i.test(navigator.userAgent);
   // Android: jeśli KX jest zainstalowany, intent otworzy apkę i doda znajomego;
   // jeśli nie — Chrome od razu przejdzie do pobrania APK (browser_fallback_url).
   var intent = code
