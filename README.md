@@ -1,6 +1,6 @@
-# KX — pobierz aplikację
+# Sendly — pobierz aplikację
 
-KX to prywatny komunikator. Działa na Androidzie i nie ma go w Sklepie Play —
+Sendly to prywatny komunikator. Działa na Androidzie i nie ma go w Sklepie Play —
 instalujesz go z pliku, stąd.
 
 ## Pobierz
@@ -17,7 +17,7 @@ Na tej stronie, w sekcji **Assets**, tapnij plik **`komunikator.apk`**.
    To pytanie pojawia się tylko raz.
 3. W powiadomieniu o pobraniu (albo **Pliki → Pobrane**) tapnij
    **`komunikator.apk`** → **Zainstaluj**.
-4. Otwórz KX i zaloguj się kodem zaproszenia.
+4. Otwórz Sendly i zaloguj się kodem zaproszenia.
 
 ## „Zablokowano przez Play Protect"
 
